@@ -4,20 +4,20 @@ from flair.data import Corpus
 from flair.datasets import ColumnCorpus
 from flair.trainers import ModelTrainer
 # define the path to the corpus TSV file
-data_folder = '/lhome/larsbun/git-projects/multiged-2023/english/realec/'
+data_folder = '/lhome/larsbun/git-projects/multiged-2023/swedish/'
 column_format = {0: 'text', 1: 'verdict'}
 
 # create a column corpus from the TSV file
-mynewcorpus = ColumnCorpus('/lhome/larsbun/git-projects/multiged-2023/english/realec', column_format)
+mynewcorpus = ColumnCorpus('/lhome/larsbun/git-projects/multiged-2023/swedish', column_format)
 
 # load a previously built model
-tagger = SequenceTagger.load('resources/taggers/continued_model/final-model.pt')
+tagger = SequenceTagger.load('/lhome/larsbun/tmp/pycharm_project_305/resources/taggers/example-swedish-only-one-tag-Mic-F1-Roberta/best-model.pt')
 
 # train with your new corpus
 trainer: ModelTrainer = ModelTrainer(tagger, mynewcorpus)
 
 # 7. start training
-trainer.train('resources/taggers/continued_model',
+trainer.train('resources/taggers/continued_model-swe-roberta',
               learning_rate=0.01,
               mini_batch_size=32,
               train_with_dev=True,
@@ -41,3 +41,4 @@ for corp in [mynewcorpus]:
 
             # print newline at end of each sentence
             country_object.write('\n')
+

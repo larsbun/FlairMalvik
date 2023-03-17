@@ -1,6 +1,6 @@
 import os
 
-from flair.data import Corpus
+from flair.data import Corpus, Sentence
 from flair.datasets import ColumnCorpus
 
 ###  This file adapts an example from flair to import a corpus from a vertical format to what flair expects for sequence labeling
@@ -11,7 +11,7 @@ def return_corpus():
     columns = {0: 'text', 1: 'verdict'}
 
     # this is the folder in which train, test and dev files reside
-    folder_root = '/lhome/larsbun/git-projects/multiged-2023/'
+    folder_root = '~/git-projects/multiged-2023/'
 
     training_tuples = [['czech/', 'cs_geccc_'],
                        ['english/', 'en_fce_'],
