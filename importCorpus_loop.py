@@ -37,7 +37,7 @@ def return_corpus():
 
 def return_ger():
     columns = {0: 'text', 1: 'verdict'}
-    data_folder = '/lhome/larsbun/git-projects/multiged-2023/german/'
+    data_folder = '~/git-projects/multiged-2023/german/'
     data_group = data_folder + 'de_falko-merlin_'
     corpus: Corpus = ColumnCorpus(data_folder, columns,
                                      train_file=data_group + 'train.tsv',
@@ -48,7 +48,7 @@ def return_ger():
 
 def return_swfoo():
     columns = {0: 'text', 1: 'verdict'}
-    data_folder = '/lhome/larsbun/git-projects/multiged-2023/swedish/foo/'
+    data_folder = '~/git-projects/multiged-2023/swedish/foo/'
     data_group = data_folder + 'sv_swell_'
     corpus: Corpus = ColumnCorpus(data_folder, columns,
                                      train_file=data_group + 'train.tsv-noc.tsv',
@@ -72,7 +72,7 @@ def return_specific(language):
 
     lang, pref = training_tuples[index]
 
-    data_folder = '/lhome/larsbun/git-projects/multiged-2023/' + lang
+    data_folder = '~/git-projects/multiged-2023/' + lang
     data_group = data_folder + pref
     corpus: Corpus = ColumnCorpus(data_folder, columns,
                                      train_file=data_group + 'train.tsv',
