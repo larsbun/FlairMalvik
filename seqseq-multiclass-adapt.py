@@ -9,7 +9,7 @@ from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 from torch.utils.tensorboard import SummaryWriter
 from importCorpus_loop import return_corpus, return_ger, return_specific
-flair.device = torch.device('cuda:1')
+#flair.device = torch.device('cuda:1')
 from newScoring import F05Score
 
 
@@ -39,12 +39,16 @@ print(label_dict)
 #     FlairEmbeddings('sv-backward'),
 # ]
 
-
+embedding_types: List[TokenEmbeddings] = [
+    FlairEmbeddings('news-forward'),
+    FlairEmbeddings('news-backward'),
+    TransformerWordEmbeddings('roberta-large', pooling_operation='first_last',fine_tune=True, batch_size=8, layers='-1', use_scalar_mix=True, allow_long_sentences=True)
+]
 
 #embedding_types = [TransformerWordEmbeddings('bert-base-multilingual-cased')]
-# embeddings = StackedEmbeddings(embeddings=embedding_types)
+embeddings = StackedEmbeddings(embeddings=embedding_types)
 
-embeddings = TransformerWordEmbeddings('bert-base-multilingual-cased')
+# embeddings = TransformerWordEmbeddings('bert-base-multilingual-cased')
 #embeddings = WordEmbeddings('de-crawl')
 #embeddings = FlairEmbeddings('sv-v0-X')
 
