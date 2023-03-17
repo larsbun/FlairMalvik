@@ -6,12 +6,14 @@ from flair.datasets import ColumnCorpus
 ###  This file adapts an example from flair to import a corpus from a vertical format to what flair expects for sequence labeling
 ###  It is rewritten to provide a function, which returns the corpus list for import (to function as a module)
 
+homedir = os.path.expanduser('~')
+
 def return_corpus():
     # define columns
     columns = {0: 'text', 1: 'verdict'}
 
     # this is the folder in which train, test and dev files reside
-    folder_root = '~/git-projects/multiged-2023/'
+    folder_root = homedir + '/git-projects/multiged-2023/'
 
     training_tuples = [['czech/', 'cs_geccc_'],
                        ['english/', 'en_fce_'],
@@ -24,6 +26,7 @@ def return_corpus():
     corpus = list([x for x in range(len(training_tuples))])
 
     for i, tup in enumerate(training_tuples):
+        print(i,tup)
         langdir, tset = tup
         data_folder = os.path.join(folder_root) + langdir
         data_group = os.path.join(data_folder) + tset
@@ -37,7 +40,7 @@ def return_corpus():
 
 def return_ger():
     columns = {0: 'text', 1: 'verdict'}
-    data_folder = '~/git-projects/multiged-2023/german/'
+    data_folder = homedir + '/git-projects/multiged-2023/german/'
     data_group = data_folder + 'de_falko-merlin_'
     corpus: Corpus = ColumnCorpus(data_folder, columns,
                                      train_file=data_group + 'train.tsv',

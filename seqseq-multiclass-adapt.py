@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os, torch, flair, pickle
 
 from flair.data import MultiCorpus
@@ -42,7 +44,7 @@ print(label_dict)
 #embedding_types = [TransformerWordEmbeddings('bert-base-multilingual-cased')]
 # embeddings = StackedEmbeddings(embeddings=embedding_types)
 
-embeddings = TransformerWordEmbeddings('xlm-roberta-base')
+embeddings = TransformerWordEmbeddings('bert-base-multilingual-cased')
 #embeddings = WordEmbeddings('de-crawl')
 #embeddings = FlairEmbeddings('sv-v0-X')
 
@@ -63,7 +65,7 @@ writer = SummaryWriter()
 trainer = ModelTrainer(tagger, swc)
 
 # 7. start training
-experiment_root = 'resources/taggers/example-only-swedish-no-crf-roberta'
+experiment_root = 'resources/taggers/example-only-swedish-no-crf-bert-multiling'
 os.makedirs(experiment_root + '/log')
 
 trainer.train(experiment_root,
