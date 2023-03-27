@@ -9,16 +9,20 @@ from flair.models import SequenceTagger
 from flair.trainers import ModelTrainer
 from torch.utils.tensorboard import SummaryWriter
 from importCorpus_loop import return_corpus, return_ger, return_specific
-#flair.device = torch.device('cuda:1')
+flair.device = torch.device('cuda:1')
 from newScoring import F05Score
 
 
+torch.cuda.empty_cache()
 
 #corpus = return_specific('swedish')
 corpus = return_corpus()
 swc = corpus[4]
 
-mc = MultiCorpus(corpus)
+print(torch.cuda.memory_summary(device=None, abbreviated=False))
+
+# swc = return_specific('swedish')
+# mc = MultiCorpus(corpus)
 # 2. what label do we want to predict?
 label_type = 'verdict'
 
@@ -33,29 +37,34 @@ print(label_dict)
 
 
 # 4. initialize embeddings
-# embedding_types = [
-#     # we use multilingual Flair embeddings in this task
-#     FlairEmbeddings('sv-forward'),
-#     FlairEmbeddings('sv-backward'),
-# ]
-
-embedding_types: List[TokenEmbeddings] = [
-    FlairEmbeddings('news-forward'),
-    FlairEmbeddings('news-backward'),
-    TransformerWordEmbeddings('roberta-large', pooling_operation='first_last',fine_tune=True, batch_size=8, layers='-1', use_scalar_mix=True, allow_long_sentences=True)
+embedding_types = [
+    # we use multilingual Flair embeddings in this task
+    FlairEmbeddings('sv-forward'),
+    FlairEmbeddings('sv-backward'),
 ]
 
-#embedding_types = [TransformerWordEmbeddings('bert-base-multilingual-cased')]
-embeddings = StackedEmbeddings(embeddings=embedding_types)
+# embedding_types =  [
+#     FlairEmbeddings('news-forward'),
+#     FlairEmbeddings('news-backward'),
+    # TransformerWordEmbeddings('roberta-large',
+    #                           pooling_operation='first_last',
+    #                           fine_tune=True,
+    #                           batch_size=8, layers='-1',
+    #                           use_scalar_mix=True,
+    #                           allow_long_sentences=True)
+# ]
 
-# embeddings = TransformerWordEmbeddings('bert-base-multilingual-cased')
+#embedding_types = [TransformerWordEmbeddings('bert-base-multilingual-cased')]
+# embeddings = StackedEmbeddings(embeddings=embedding_types)
+
+embeddings = TransformerWordEmbeddings('bert-base-cased')
 #embeddings = WordEmbeddings('de-crawl')
 #embeddings = FlairEmbeddings('sv-v0-X')
 
 # 5. initialize sequence tagger
 tagger = SequenceTagger(hidden_size=256,
                         embeddings=embeddings,
-                        rnn_layers = 10,
+                        rnn_layers = 1,
                         tag_dictionary=label_dict,
                         tag_type=label_type,
                         use_crf=False)
@@ -69,7 +78,7 @@ writer = SummaryWriter()
 trainer = ModelTrainer(tagger, swc)
 
 # 7. start training
-experiment_root = 'resources/taggers/example-only-swedish-no-crf-bert-multiling'
+experiment_root = 'resources/taggers/example-only-swedish-svbf-nocrf5'
 os.makedirs(experiment_root + '/log')
 
 trainer.train(experiment_root,
