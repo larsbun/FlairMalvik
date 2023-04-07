@@ -22,7 +22,7 @@ swc = corpus[4]
 print(torch.cuda.memory_summary(device=None, abbreviated=False))
 
 # swc = return_specific('swedish')
-# mc = MultiCorpus(corpus)
+mc = MultiCorpus(corpus)
 # 2. what label do we want to predict?
 label_type = 'verdict'
 
@@ -37,11 +37,11 @@ print(label_dict)
 
 
 # 4. initialize embeddings
-embedding_types = [
-    # we use multilingual Flair embeddings in this task
-    FlairEmbeddings('sv-forward'),
-    FlairEmbeddings('sv-backward'),
-]
+# embedding_types = [
+#     # we use multilingual Flair embeddings in this task
+#     FlairEmbeddings('sv-forward'),
+#     FlairEmbeddings('sv-backward'),
+# ]
 
 # embedding_types =  [
 #     FlairEmbeddings('news-forward'),
@@ -57,7 +57,7 @@ embedding_types = [
 #embedding_types = [TransformerWordEmbeddings('bert-base-multilingual-cased')]
 # embeddings = StackedEmbeddings(embeddings=embedding_types)
 
-embeddings = TransformerWordEmbeddings('bert-base-cased')
+embeddings = TransformerWordEmbeddings('KB/bert-base-swedish-cased')
 #embeddings = WordEmbeddings('de-crawl')
 #embeddings = FlairEmbeddings('sv-v0-X')
 
@@ -78,7 +78,7 @@ writer = SummaryWriter()
 trainer = ModelTrainer(tagger, swc)
 
 # 7. start training
-experiment_root = 'resources/taggers/example-only-swedish-svbf-nocrf5'
+experiment_root = 'resources/taggers/swedish-bert-multiling-cased'
 os.makedirs(experiment_root + '/log')
 
 trainer.train(experiment_root,

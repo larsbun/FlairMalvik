@@ -1,30 +1,33 @@
 from flair.models import SequenceTagger
+from importCorpus_loop import return_corpus
 from flair.data import Sentence
 from flair.data import Corpus
 from flair.datasets import ColumnCorpus
 from flair.trainers import ModelTrainer
 # define the path to the corpus TSV file
-data_folder = '/lhome/larsbun/git-projects/multiged-2023/swedish/'
+data_folder = '/lhome/larsbun/git-projects/multiged-2023/english/'
 column_format = {0: 'text', 1: 'verdict'}
 
 # create a column corpus from the TSV file
-mynewcorpus = ColumnCorpus('/lhome/larsbun/git-projects/multiged-2023/swedish', column_format)
+#mynewcorpora = [ColumnCorpus('/lhome/larsbun/git-projects/multiged-2023/english/realec', column_format)]
 
+mynewcorpora = return_corpus()
 # load a previously built model
-tagger = SequenceTagger.load('/lhome/larsbun/tmp/pycharm_project_305/resources/taggers/example-swedish-only-one-tag-Mic-F1-Roberta/best-model.pt')
+BASEDIR = '/lhome/larsbun/tmp/pycharm_project_305/resources/taggers/'
+tagger = SequenceTagger.load(BASEDIR + 'example-mc-grammar-no-downsample-all-five-dev-explicit-gpu' + '/best-model.pt')
 
 # train with your new corpus
-trainer: ModelTrainer = ModelTrainer(tagger, mynewcorpus)
+# trainer: ModelTrainer = ModelTrainer(tagger, mynewcorpus)
 
 # 7. start training
-trainer.train('resources/taggers/continued_model-swe-roberta',
-              learning_rate=0.01,
-              mini_batch_size=32,
-              train_with_dev=True,
-              max_epochs=150)
+# trainer.train('resources/taggers/continued_model-swe-roberta',
+#               learning_rate=0.01,
+#               mini_batch_size=32,
+#               train_with_dev=True,
+#               max_epochs=150)
 
 # got through each sentence
-for corp in [mynewcorpus]:
+for corp in mynewcorpora:
     country = corp.name.split('/')[-2]
     print(country)
     print(corp.test[0])
